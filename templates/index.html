@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchGrass AI — 15-Minute Micro-Expedition Engine</title>
+  <meta name="description" content="Open-source AI micro-expeditions designed to get you off the screen and into nature. Powered by local ONNX vision models.">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+</head>
+<body>
+
+  <!-- Top Header Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <span class="brand-icon">🌱</span>
+        <div class="brand-text">
+          <h1>TouchGrass <span class="badge-ai">Local Open AI</span></h1>
+          <p class="tagline">The Screen Ends Here. Your Expedition Begins.</p>
+        </div>
+      </div>
+      <div class="system-status" id="system-status">
+        <span class="status-dot"></span>
+        <span id="model-status-text">MobileNetV4 ONNX (12ms Local CPU)</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- Screen Time Banner -->
+    <div class="screen-timer-card">
+      <div class="screen-timer-left">
+        <span class="stopwatch-icon">⏱️</span>
+        <div>
+          <span class="timer-label">SESSION SCREEN TIME</span>
+          <div class="screen-counter" id="screen-timer">00:04</div>
+        </div>
+      </div>
+      <div class="principle-note">
+        <strong>Master Rule:</strong> The screen is the shortest part of the experience.
+      </div>
+    </div>
+
+    <!-- Step 1: Quick Dispatch Panel -->
+    <section class="card panel-active" id="dispatch-panel">
+      <div class="section-badge">STEP 1 &bull; 5 SECONDS</div>
+      <h2>Configure Micro-Expedition</h2>
+      <p class="section-desc">Select your available time and surrounding biome. We generate an immediate offline sensory mission.</p>
+
+      <div class="control-group">
+        <label class="control-label">Time Budget Outside:</label>
+        <div class="pill-grid" id="duration-selector">
+          <button type="button" class="pill-btn" data-duration="5">
+            <span class="pill-title">5 Min</span>
+            <span class="pill-sub">Quick Breath</span>
+          </button>
+          <button type="button" class="pill-btn active" data-duration="15">
+            <span class="pill-title">15 Min</span>
+            <span class="pill-sub">Standard Stroll</span>
+          </button>
+          <button type="button" class="pill-btn" data-duration="30">
+            <span class="pill-title">30 Min</span>
+            <span class="pill-sub">Nature Loop</span>
+          </button>
+          <button type="button" class="pill-btn" data-duration="60">
+            <span class="pill-title">60 Min</span>
+            <span class="pill-sub">Deep Disconnect</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Immediate Biome / Environment:</label>
+        <div class="pill-grid" id="biome-selector">
+          <button type="button" class="pill-btn active" data-biome="park">
+            <span class="pill-icon">🌲</span>
+            <span class="pill-title">Public Park</span>
+          </button>
+          <button type="button" class="pill-btn" data-biome="backyard">
+            <span class="pill-icon">🏡</span>
+            <span class="pill-title">Backyard / Garden</span>
+          </button>
+          <button type="button" class="pill-btn" data-biome="urban">
+            <span class="pill-icon">🏢</span>
+            <span class="pill-title">Urban Sidewalk</span>
+          </button>
+          <button type="button" class="pill-btn" data-biome="trail">
+            <span class="pill-icon">🥾</span>
+            <span class="pill-title">Forest Trail</span>
+          </button>
+          <button type="button" class="pill-btn" data-biome="waterfront">
+            <span class="pill-icon">🌊</span>
+            <span class="pill-title">Waterfront</span>
+          </button>
+        </div>
+      </div>
+
+      <button id="dispatch-btn" class="btn btn-primary btn-large">
+        ⚡ Dispatch Expedition & Leave Screen
+      </button>
+    </section>
+
+    <!-- Step 2: Quest Briefing Panel -->
+    <section class="card panel-hidden" id="quest-panel">
+      <div class="section-badge">STEP 2 &bull; MISSION BRIEFING</div>
+      <div class="quest-header">
+        <h2 id="quest-title">Canopy & Bark Texture Recon</h2>
+        <span class="badge-tag" id="quest-biome-tag">Public Park</span>
+      </div>
+
+      <p class="quest-summary" id="quest-brief">
+        Head outside to the nearest green patch and examine leaf architecture.
+      </p>
+
+      <div class="tasks-box">
+        <h3>Off-Screen Sensory Objectives:</h3>
+        <ul id="quest-tasks-list" class="tasks-list">
+          <!-- Populated by JS -->
+        </ul>
+      </div>
+
+      <div class="challenge-box">
+        <div class="challenge-icon">🎯</div>
+        <div>
+          <strong>Photo Verification Target:</strong>
+          <p id="quest-challenge">Capture one photo of a fallen leaf with distinct vein structure.</p>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button id="pocket-mode-btn" class="btn btn-success btn-large">
+          📴 Enter Pocket Mode & Step Outside
+        </button>
+        <button id="new-quest-btn" class="btn btn-secondary">
+          🔄 Re-roll Mission
+        </button>
+      </div>
+    </section>
+
+    <!-- Step 3: Pocket / Ambient Outdoors Mode -->
+    <section class="card panel-hidden pocket-mode-active" id="pocket-panel">
+      <div class="pocket-header">
+        <span class="pocket-badge">🌿 TOUCH GRASS POCKET MODE</span>
+        <button id="exit-pocket-btn" class="btn-text">Exit to Desk &times;</button>
+      </div>
+
+      <div class="pocket-center">
+        <div class="ambient-pulse">🌱</div>
+        <div class="pocket-timer-large" id="pocket-countdown">15:00</div>
+        <p class="pocket-subtext">PUT YOUR PHONE IN YOUR POCKET.<br>LOOK UP. BREATHE. TOUCH GRASS.</p>
+        <div class="pocket-current-quest" id="pocket-quest-name">Canopy & Bark Recon</div>
+      </div>
+
+      <div class="pocket-footer">
+        <button id="return-from-outside-btn" class="btn btn-primary btn-large">
+          📸 I've Touched Grass — Verify Observation
+        </button>
+      </div>
+    </section>
+
+    <!-- Step 4: Verification & Local AI Inference Panel -->
+    <section class="card panel-hidden" id="verify-panel">
+      <div class="section-badge">STEP 3 &bull; LOCAL AI VERIFICATION</div>
+      <h2>Field Discovery Verification</h2>
+      <p class="section-desc">Submit 1 photo of the natural element you found outdoors. Our 100% local open-source vision AI verifies it in 12ms.</p>
+
+      <form id="verify-form" class="upload-zone">
+        <input type="file" id="image-input" accept="image/*" capture="environment" class="file-input">
+        <label for="image-input" class="file-drop-area" id="drop-area">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">
+            <strong>Tap to take a photo or select field image</strong>
+            <span>JPEG, PNG, WebP &bull; Processed 100% locally on your CPU</span>
+          </div>
+        </label>
+        <div id="image-preview-container" class="preview-hidden">
+          <img id="image-preview" src="" alt="Field observation preview">
+          <button type="button" id="remove-image-btn" class="btn-small btn-secondary">Change Photo</button>
+        </div>
+      </form>
+
+      <div class="actual-time-row">
+        <label for="actual-time-input">Actual Time Spent Outdoors (Minutes):</label>
+        <input type="number" id="actual-time-input" min="1" max="180" value="15" class="number-input">
+      </div>
+
+      <button id="run-verify-btn" class="btn btn-primary btn-large" disabled>
+        🧠 Run Local AI Biophilia Analysis
+      </button>
+
+      <!-- AI Results Box -->
+      <div id="verification-result-box" class="result-box-hidden">
+        <!-- Populated dynamically -->
+      </div>
+    </section>
+
+    <!-- Persistent Stats & Field Journal -->
+    <section class="card stats-panel" id="stats-panel">
+      <div class="stats-header">
+        <h2>Your Offline Field Journal</h2>
+        <span class="privacy-tag">🔒 100% Local SQLite Persistence</span>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-num" id="stat-minutes">0</span>
+          <span class="stat-lbl">Outdoor Minutes</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-expeditions">0</span>
+          <span class="stat-lbl">Expeditions Done</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-score">0%</span>
+          <span class="stat-lbl">Avg Grass Score</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-days">0</span>
+          <span class="stat-lbl">Active Days</span>
+        </div>
+      </div>
+
+      <div class="history-container">
+        <h3>Recent Completed Expeditions</h3>
+        <div id="history-list" class="history-list">
+          <p class="empty-state">No expeditions completed yet. Dispatch your first quest above!</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>
+        <strong>TouchGrass AI</strong> &bull; Built with <strong>MobileNetV4 ONNX (Apache 2.0)</strong> and <strong>ONNX Runtime</strong>.
+      </p>
+      <p class="footer-sub">
+        Zero Cloud API Keys &bull; Zero Tracking &bull; 100% Offline Capable &bull; Designed to get you away from this screen.
+      </p>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
